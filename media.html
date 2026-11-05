@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Esencia Nativa Media</title>
-<meta name="description" content="Esencia Nativa Media — producción audiovisual.">
+<meta name="description" content="Esencia Nativa Media — producción audiovisual, eventos, sonido y contenido.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -16,7 +16,9 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--bone);font-family:"Archivo",system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  body.locked{overflow:hidden}
   a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
   .tex{position:fixed;inset:0;z-index:0;pointer-events:none;
     background-image:
       linear-gradient(rgba(241,239,233,.025) 1px,transparent 1px),
@@ -42,33 +44,39 @@
   .reveal.in{opacity:1;transform:none}
 
   .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;max-width:1300px}
-  .hero .mark{font-family:"Anton",sans-serif;line-height:.86;letter-spacing:-.01em;text-transform:uppercase;
-    font-size:clamp(54px,15vw,200px)}
+  .hero .mark{font-family:"Anton",sans-serif;line-height:.86;letter-spacing:-.01em;text-transform:uppercase;font-size:clamp(54px,15vw,200px)}
   .hero .mark span{display:block}
   .hero .mark .accent{color:var(--spark)}
-  .hero .sub{margin-top:26px;display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}
+  .hero .sub{margin-top:26px}
   .hero .role{font-size:clamp(14px,2.4vw,18px);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
-  .hero .line{font-weight:300;color:var(--dim);max-width:46ch;line-height:1.55;font-size:clamp(14px,2.2vw,17px)}
+  .hero .line{font-weight:300;color:var(--dim);max-width:48ch;line-height:1.55;font-size:clamp(14px,2.2vw,17px);margin-top:20px}
   .intro-anim .mark span{opacity:0;transform:translateY(40px);animation:rise .9s var(--ease) forwards}
   .intro-anim .mark span:nth-child(1){animation-delay:.15s}
   .intro-anim .mark span:nth-child(2){animation-delay:.28s}
   .intro-anim .mark span:nth-child(3){animation-delay:.41s}
   @keyframes rise{to{opacity:1;transform:none}}
 
-  h2{font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(28px,6vw,64px);line-height:.95;letter-spacing:0;margin-bottom:34px}
+  h2{font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(28px,6vw,64px);line-height:.95;margin-bottom:34px}
   h2 em{color:var(--spark);font-style:normal}
   p.lead{font-weight:300;line-height:1.6;color:var(--dim);max-width:60ch;font-size:clamp(15px,2.3vw,18px)}
-  .ph{color:#6a564f;font-style:italic}
 
-  .reel{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
-  .tile{position:relative;aspect-ratio:16/9;background:var(--panel);border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;transition:border-color .35s var(--ease),transform .35s var(--ease)}
+  .reel{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+  .tile{position:relative;aspect-ratio:16/9;background:var(--panel);border:1px solid var(--line);overflow:hidden;cursor:pointer;transition:border-color .35s var(--ease),transform .35s var(--ease)}
   .tile:hover{border-color:var(--spark);transform:translateY(-3px)}
-  .tile .play{width:54px;height:54px;border-radius:50%;border:1px solid var(--bone);display:grid;place-items:center;color:var(--bone);transition:border-color .3s,color .3s}
-  .tile:hover .play{border-color:var(--spark);color:var(--spark)}
-  .tile .cap{position:absolute;left:14px;bottom:12px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  .tile img{width:100%;height:100%;object-fit:cover;opacity:.72;transition:opacity .4s var(--ease),transform .6s var(--ease)}
+  .tile:hover img{opacity:1;transform:scale(1.04)}
+  .tile .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;border:1px solid var(--bone);display:grid;place-items:center;color:var(--bone);background:rgba(11,11,13,.35);backdrop-filter:blur(2px);transition:border-color .3s,color .3s,background-color .3s}
+  .tile:hover .play{border-color:var(--spark);color:var(--spark);background:rgba(11,11,13,.2)}
+  .tile .cap{position:absolute;left:14px;right:14px;bottom:12px;font-size:12.5px;line-height:1.3;letter-spacing:.02em;color:var(--bone);text-shadow:0 1px 8px rgba(0,0,0,.8)}
+  .tile .tag{position:absolute;left:14px;top:12px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
 
-  .svc{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0;border-top:1px solid var(--line)}
-  .svc div{padding:22px 4px;border-bottom:1px solid var(--line);font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(18px,3vw,26px);transition:color .3s var(--ease),padding-left .3s var(--ease)}
+  .clients{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+  .clients div{padding:30px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;place-items:center;text-align:center;
+    font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(16px,2.4vw,22px);color:var(--bone);transition:background-color .3s var(--ease),color .3s var(--ease)}
+  .clients div:hover{background:var(--spark);color:#0b0b0d}
+
+  .svc{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0;border-top:1px solid var(--line)}
+  .svc div{padding:22px 4px;border-bottom:1px solid var(--line);font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(17px,2.6vw,24px);transition:color .3s var(--ease),padding-left .3s var(--ease)}
   .svc div:hover{color:var(--spark);padding-left:12px}
 
   .contact{display:flex;gap:28px;flex-wrap:wrap;margin-top:8px}
@@ -76,6 +84,12 @@
   .contact a:hover{color:var(--spark)}
 
   footer{position:relative;z-index:10;text-align:center;padding:50px 20px calc(40px + env(safe-area-inset-bottom,0px));color:rgba(241,239,233,.3);font-size:12px;letter-spacing:.1em;text-transform:uppercase;border-top:1px solid var(--line);max-width:1200px;margin:40px auto 0}
+
+  .box{position:fixed;inset:0;z-index:60;background:rgba(5,5,7,.92);display:none;align-items:center;justify-content:center;padding:24px}
+  .box.on{display:flex}
+  .box .frame{width:min(92vw,1100px);aspect-ratio:16/9;background:#000;border:1px solid var(--line)}
+  .box iframe{width:100%;height:100%;border:0}
+  .box .x{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));right:22px;color:var(--bone);font-size:30px;cursor:pointer;line-height:1}
 
   @media (prefers-reduced-motion:reduce){
     .intro-anim .mark span,.reveal{opacity:1!important;transform:none!important;animation:none!important}
@@ -96,21 +110,44 @@
   <main>
     <section class="hero intro-anim">
       <div class="mark"><span>Esencia</span><span>Nativa</span><span class="accent">Media</span></div>
-      <div class="sub">
-        <span class="role">Producción audiovisual</span>
-      </div>
-      <p class="line" style="margin-top:20px">Dirección, cámara, edición y color. Historias con textura de calle.</p>
+      <div class="sub"><span class="role">Producción audiovisual, eventos y sonido</span></div>
+      <p class="line">Dirección, cámara, edición, color, sonido directo y contenido. Historias con textura de calle, para instituciones y marcas.</p>
     </section>
 
     <section class="reveal">
       <h2>El <em>reel</em></h2>
       <div class="reel">
-        <div class="tile" data-magnetic><div class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><span class="cap">[Proyecto 01]</span></div>
-        <div class="tile" data-magnetic><div class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><span class="cap">[Proyecto 02]</span></div>
-        <div class="tile" data-magnetic><div class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><span class="cap">[Proyecto 03]</span></div>
-        <div class="tile" data-magnetic><div class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><span class="cap">[Proyecto 04]</span></div>
+        <div class="tile" data-yt="RDCvchRMJp0">
+          <img src="https://i.ytimg.com/vi/RDCvchRMJp0/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/RDCvchRMJp0/hqdefault.jpg'" alt="Alicia Mogollón" loading="lazy">
+          <span class="tag">Institucional</span>
+          <div class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <span class="cap">Sé una mujer valiente como Alicia Mogollón</span>
+        </div>
+        <div class="tile" data-yt="qHOzMxkpIX0">
+          <img src="https://i.ytimg.com/vi/qHOzMxkpIX0/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/qHOzMxkpIX0/hqdefault.jpg'" alt="Yocksy Martínez" loading="lazy">
+          <span class="tag">Institucional</span>
+          <div class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <span class="cap">Mujeres que inciden en sus comunidades</span>
+        </div>
+        <div class="tile" data-yt="Wymd0NIVG3M">
+          <img src="https://i.ytimg.com/vi/Wymd0NIVG3M/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/Wymd0NIVG3M/hqdefault.jpg'" alt="Ana Lucía Yama" loading="lazy">
+          <span class="tag">Institucional</span>
+          <div class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+          <span class="cap">Unidas para transformar realidades</span>
+        </div>
       </div>
-      <p class="lead" style="margin-top:22px"><span class="ph">[Mándame los videos / links de YouTube o Vimeo y los incrusto con su portada.]</span></p>
+    </section>
+
+    <section class="reveal">
+      <h2>Han <em>confiado</em></h2>
+      <div class="clients">
+        <div>ACNUR</div>
+        <div>OIM</div>
+        <div>UNICEF</div>
+        <div>Campus</div>
+        <div>Tocando Madera</div>
+      </div>
+      <p class="lead" style="margin-top:22px;opacity:.7">Logos por venir — por ahora van como texto.</p>
     </section>
 
     <section class="reveal">
@@ -121,9 +158,12 @@
         <div>Edición</div>
         <div>Color</div>
         <div>Motion</div>
-        <div>Reels</div>
+        <div>Producción de eventos</div>
+        <div>Producción logística</div>
+        <div>Sonido directo</div>
+        <div>Creación de contenido</div>
+        <div>Marketing digital</div>
       </div>
-      <p class="lead" style="margin-top:24px"><span class="ph">[Ajusta los servicios reales de Esencia Nativa Media.]</span></p>
     </section>
 
     <section class="reveal">
@@ -131,13 +171,18 @@
       <div class="contact">
         <a href="#" data-magnetic>Instagram</a>
         <a href="#" data-magnetic>YouTube</a>
-        <a href="#" data-magnetic>Behance / Vimeo</a>
         <a href="mailto:#" data-magnetic>Booking / mail</a>
       </div>
+      <p class="lead" style="margin-top:20px;opacity:.7">Pásame las redes y el correo reales para dejar estos enlaces activos.</p>
     </section>
 
     <footer>Esencia Nativa Media — 2026</footer>
   </main>
+
+  <div class="box" id="box" aria-hidden="true">
+    <span class="x" id="boxX" role="button" aria-label="Cerrar">&times;</span>
+    <div class="frame"><iframe id="boxFrame" allow="autoplay; encrypted-media" allowfullscreen title="Video"></iframe></div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
   <script>
@@ -157,9 +202,22 @@
         el.addEventListener("mousemove",function(e){var r=el.getBoundingClientRect();tx=(e.clientX-(r.left+r.width/2))*.25;ty=(e.clientY-(r.top+r.height/2))*.35;});
         (function ml(){x+=(tx-x)*.12;y+=(ty-y)*.12;el.style.transform="translate("+x+"px,"+y+"px)";requestAnimationFrame(ml);})();
       });
+      document.querySelectorAll(".tile").forEach(function(t){
+        t.addEventListener("mouseenter",function(){cur.classList.add("hot");});
+        t.addEventListener("mouseleave",function(){cur.classList.remove("hot");});
+      });
     }
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.18});
     document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
+
+    /* lightbox */
+    var box=document.getElementById("box"),frame=document.getElementById("boxFrame"),x=document.getElementById("boxX");
+    function open(id){frame.src="https://www.youtube.com/embed/"+id+"?autoplay=1&rel=0";box.classList.add("on");document.body.classList.add("locked");}
+    function close(){box.classList.remove("on");document.body.classList.remove("locked");frame.src="";}
+    document.querySelectorAll(".tile").forEach(function(t){t.addEventListener("click",function(){open(t.getAttribute("data-yt"));});});
+    x.addEventListener("click",close);
+    box.addEventListener("click",function(e){if(e.target===box)close();});
+    addEventListener("keydown",function(e){if(e.key==="Escape")close();});
   })();
   </script>
 </body>
