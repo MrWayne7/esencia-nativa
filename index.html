@@ -82,10 +82,14 @@
   }
   .logo-img{
     display:block;width:100%;height:auto;
-    clip-path:inset(100% 0 0 0);
-    will-change:clip-path;
+    opacity:0;will-change:opacity,transform,filter;
   }
-  body.ready .logo-img{ animation:pour 1.8s var(--ease) .35s forwards; }
+  body.ready .logo-img{ animation:emerge 2.1s var(--ease) .3s forwards; }
+  @keyframes emerge{
+    0%{opacity:0;transform:scale(1.06);filter:blur(12px)}
+    55%{opacity:1}
+    100%{opacity:1;transform:scale(1);filter:blur(0)}
+  }
   @keyframes pour{ from{clip-path:inset(100% 0 0 0)} to{clip-path:inset(0 0 0 0)} }
   @keyframes shimmer{
     0%{background-position:14% 50%} 50%{background-position:86% 50%} 100%{background-position:14% 50%}
@@ -171,7 +175,7 @@
   }
 
   @media (prefers-reduced-motion:reduce){
-    .logo-img{clip-path:none!important;animation:none!important}
+    .logo-img{opacity:1!important;filter:none!important;transform:none!important;animation:none!important}
     .grain{animation:none}
     .scroll-cue::after{animation:none;top:20%}
     .tagline{opacity:1!important;transform:none!important;transition:none!important}
@@ -238,36 +242,51 @@
         "float noise(vec2 p){ vec2 i=floor(p),f=fract(p); vec2 u=f*f*(3.0-2.0*f);",
         "  float a=hash(i),b=hash(i+vec2(1.0,0.0)),c=hash(i+vec2(0.0,1.0)),d=hash(i+vec2(1.0,1.0));",
         "  return mix(mix(a,b,u.x),mix(c,d,u.x),u.y); }",
-        "float fbm(vec2 p){ float v=0.0,a=0.5; mat2 m=mat2(1.6,1.2,-1.2,1.6);",
+        "float fbm(vec2 p){ float v=0.0,a=0.55; mat2 m=mat2(1.7,1.2,-1.2,1.7);",
         "  for(int i=0;i<5;i++){ v+=a*noise(p); p=m*p; a*=0.5; } return v; }",
+        "float starLayer(vec2 p,float scale,float density,float tw){",
+        "  vec2 gp=p*scale; vec2 ip=floor(gp); vec2 fp=fract(gp)-0.5;",
+        "  float h=hash(ip); float present=step(1.0-density,h);",
+        "  vec2 c=(vec2(hash(ip+3.1),hash(ip+7.7))-0.5)*0.7;",
+        "  float d=length(fp-c);",
+        "  float core=smoothstep(0.055,0.0,d);",
+        "  float halo=smoothstep(0.30,0.0,d)*0.22;",
+        "  float flick=0.6+0.4*sin(uTime*tw+h*40.0);",
+        "  return (core+halo)*present*flick; }",
         "void main(){",
         "  vec2 uv=gl_FragCoord.xy/uRes.xy;",
         "  vec2 p=(gl_FragCoord.xy-0.5*uRes.xy)/uRes.y;",
-        "  float t=uTime*0.02;",
-        "  vec2 q=vec2(fbm(p*1.1+vec2(0.0,t)), fbm(p*1.1+vec2(3.1,-t)));",
-        "  float n=fbm(p*1.1+2.0*q+t*0.3);",
-        "  float n2=fbm(p*1.6+q*1.5-t*0.5);",
-        "  vec3 col=vec3(0.015,0.016,0.035);",
-        "  col+=vec3(0.32,0.12,0.50)*pow(max(n,0.0),2.2)*0.75;",
-        "  col+=vec3(0.10,0.30,0.52)*pow(max(n2,0.0),3.0)*0.45;",
-        "  col+=vec3(0.55,0.13,0.40)*pow(max(n-0.12,0.0),3.0)*0.35;",
-        "  float md=length(p-uMouse*vec2(uRes.x/uRes.y,1.0)*0.5);",
-        "  col+=vec3(0.30,0.22,0.45)*smoothstep(0.85,0.0,md)*0.25;",
+        "  vec2 mo=uMouse*vec2(uRes.x/uRes.y,1.0);",
+        "  float t=uTime*0.015;",
+        "  vec2 np=p*1.15+mo*0.03;",
+        "  vec2 q=vec2(fbm(np+vec2(0.0,t)), fbm(np+vec2(5.2,-t*0.8)));",
+        "  float f=fbm(np+1.7*q+t*0.4);",
+        "  f=smoothstep(0.12,0.95,f);",
+        "  float dust=smoothstep(0.25,0.90,fbm(np*1.25+q));",
+        "  vec3 base=vec3(0.006,0.008,0.022);",
+        "  vec3 violet=vec3(0.33,0.13,0.52);",
+        "  vec3 magenta=vec3(0.58,0.14,0.42);",
+        "  vec3 cyan=vec3(0.10,0.34,0.50);",
+        "  vec3 col=base;",
+        "  col+=violet*pow(f,1.8)*0.70;",
+        "  col+=magenta*pow(max(f-0.35,0.0),2.2)*0.55;",
+        "  col+=cyan*pow(max(q.x,0.0),2.5)*0.28;",
+        "  col*=mix(0.5,1.0,dust);",
+        "  col+=violet*pow(f,6.0)*0.55;",
+        "  vec2 sd=vec2(t*0.6,0.0);",
         "  float stars=0.0;",
-        "  for(int i=0;i<3;i++){",
-        "    float sc=130.0+float(i)*150.0;",
-        "    vec2 gp=p*sc+vec2(float(i)*7.3,float(i)*3.1);",
-        "    vec2 ip=floor(gp); vec2 fp=fract(gp)-0.5;",
-        "    float hh=hash(ip+float(i)*11.0);",
-        "    float present=step(0.978,hh);",
-        "    vec2 c=vec2(hash(ip+1.7)-0.5,hash(ip+4.3)-0.5)*0.6;",
-        "    float d=length(fp-c);",
-        "    float tw=0.6+0.4*sin(uTime*(1.2+hh*2.5)+hh*30.0);",
-        "    stars+=present*smoothstep(0.09,0.0,d)*tw;",
-        "  }",
-        "  col+=vec3(0.85,0.90,1.0)*stars;",
-        "  col*=1.0-0.48*dot(p,p);",
-        "  col+=(hash(uv*uRes.xy+t)-0.5)*0.015;",
+        "  stars+=starLayer(p+mo*0.015+sd,110.0,0.030,1.1);",
+        "  stars+=starLayer(p+mo*0.035+sd*1.5,190.0,0.022,1.7);",
+        "  stars+=starLayer(p+mo*0.060+sd*2.2,300.0,0.014,2.3);",
+        "  float hero=starLayer(p+mo*0.010+sd*0.5,60.0,0.009,0.8);",
+        "  col+=vec3(0.80,0.86,1.0)*stars;",
+        "  col+=vec3(0.95,0.97,1.0)*hero*1.4;",
+        "  float md=length(p-mo*0.25);",
+        "  col+=vec3(0.22,0.18,0.40)*smoothstep(1.1,0.0,length(p))*0.10;",
+        "  col+=vec3(0.30,0.24,0.50)*smoothstep(0.70,0.0,md)*0.16;",
+        "  col*=1.0-0.50*dot(p,p);",
+        "  col=pow(max(col,0.0),vec3(0.92));",
+        "  col+=(hash(uv*uRes.xy+t)-0.5)*0.012;",
         "  gl_FragColor=vec4(col,1.0);",
         "}"
       ].join("\n");
