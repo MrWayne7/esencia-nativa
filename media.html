@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Esencia Nativa Media</title>
+<meta name="description" content="Esencia Nativa Media — producción audiovisual.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0b0d; --panel:#131317; --bone:#f1efe9; --dim:rgba(241,239,233,.5);
+    --line:rgba(241,239,233,.14); --spark:#ff5a3c;
+    --ease:cubic-bezier(.2,.7,.2,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--bone);font-family:"Archivo",system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .tex{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(241,239,233,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(241,239,233,.025) 1px,transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(120% 90% at 50% 40%,#000,transparent 85%);
+    -webkit-mask-image:radial-gradient(120% 90% at 50% 40%,#000,transparent 85%)}
+  .grain{position:fixed;inset:-150%;z-index:1;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation:grain 6s steps(5) infinite}
+  @keyframes grain{0%{transform:translate(0,0)}50%{transform:translate(4%,-3%)}100%{transform:translate(0,0)}}
+  .cursor{position:fixed;top:0;left:0;z-index:50;pointer-events:none;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:1px solid rgba(255,90,60,.8);opacity:0;transition:width .3s var(--ease),height .3s var(--ease),margin .3s var(--ease),background-color .3s var(--ease),opacity .3s}
+  .cursor.hot{width:58px;height:58px;margin:-29px 0 0 -29px;background:rgba(255,90,60,.1)}
+  @media(hover:none){.cursor{display:none}}
+
+  nav.top{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;align-items:center;
+    padding:calc(16px + env(safe-area-inset-top,0px)) clamp(18px,4vw,40px) 16px;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+  nav.top a{color:var(--dim);transition:color .3s var(--ease)}
+  nav.top a:hover{color:var(--spark)}
+  main{position:relative;z-index:10}
+  section{padding:clamp(70px,12vh,150px) clamp(20px,6vw,80px);max-width:1200px;margin:0 auto}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+
+  .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;max-width:1300px}
+  .hero .mark{font-family:"Anton",sans-serif;line-height:.86;letter-spacing:-.01em;text-transform:uppercase;
+    font-size:clamp(54px,15vw,200px)}
+  .hero .mark span{display:block}
+  .hero .mark .accent{color:var(--spark)}
+  .hero .sub{margin-top:26px;display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}
+  .hero .role{font-size:clamp(14px,2.4vw,18px);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+  .hero .line{font-weight:300;color:var(--dim);max-width:46ch;line-height:1.55;font-size:clamp(14px,2.2vw,17px)}
+  .intro-anim .mark span{opacity:0;transform:translateY(40px);animation:rise .9s var(--ease) forwards}
+  .intro-anim .mark span:nth-child(1){animation-delay:.15s}
+  .intro-anim .mark span:nth-child(2){animation-delay:.28s}
+  .intro-anim .mark span:nth-child(3){animation-delay:.41s}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  h2{font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(28px,6vw,64px);line-height:.95;letter-spacing:0;margin-bottom:34px}
+  h2 em{color:var(--spark);font-style:normal}
+  p.lead{font-weight:300;line-height:1.6;color:var(--dim);max-width:60ch;font-size:clamp(15px,2.3vw,18px)}
+  .ph{color:#6a564f;font-style:italic}
+
+  .reel{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+  .tile{position:relative;aspect-ratio:16/9;background:var(--panel);border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;transition:border-color .35s var(--ease),transform .35s var(--ease)}
+  .tile:hover{border-color:var(--spark);transform:translateY(-3px)}
+  .tile .play{width:54px;height:54px;border-radius:50%;border:1px solid var(--bone);display:grid;place-items:center;color:var(--bone);transition:border-color .3s,color .3s}
+  .tile:hover .play{border-color:var(--spark);color:var(--spark)}
+  .tile .cap{position:absolute;left:14px;bottom:12px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+
+  .svc{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0;border-top:1px solid var(--line)}
+  .svc div{padding:22px 4px;border-bottom:1px solid var(--line);font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(18px,3vw,26px);transition:color .3s var(--ease),padding-left .3s var(--ease)}
+  .svc div:hover{color:var(--spark);padding-left:12px}
+
+  .contact{display:flex;gap:28px;flex-wrap:wrap;margin-top:8px}
+  .contact a{color:var(--dim);font-size:16px;transition:color .3s var(--ease)}
+  .contact a:hover{color:var(--spark)}
+
+  footer{position:relative;z-index:10;text-align:center;padding:50px 20px calc(40px + env(safe-area-inset-bottom,0px));color:rgba(241,239,233,.3);font-size:12px;letter-spacing:.1em;text-transform:uppercase;border-top:1px solid var(--line);max-width:1200px;margin:40px auto 0}
+
+  @media (prefers-reduced-motion:reduce){
+    .intro-anim .mark span,.reveal{opacity:1!important;transform:none!important;animation:none!important}
+    .grain{animation:none}
+  }
+</style>
+</head>
+<body>
+  <div class="tex" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+
+  <nav class="top">
+    <a href="index.html" data-magnetic>&larr; Esencia Nativa</a>
+    <a href="musica.html" data-magnetic>Música &rarr;</a>
+  </nav>
+
+  <main>
+    <section class="hero intro-anim">
+      <div class="mark"><span>Esencia</span><span>Nativa</span><span class="accent">Media</span></div>
+      <div class="sub">
+        <span class="role">Producción audiovisual</span>
+      </div>
+      <p class="line" style="margin-top:20px">Dirección, cámara, edición y color. Historias con textura de calle.</p>
+    </section>
+
+    <section class="reveal">
+      <h2>El <em>reel</em></h2>
+      <div class="reel">
+        <div class="tile" data-magnetic><div class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><span class="cap">[Proyecto 01]</span></div>
+        <div class="tile" data-magnetic><div class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><span class="cap">[Proyecto 02]</span></div>
+        <div class="tile" data-magnetic><div class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><span class="cap">[Proyecto 03]</span></div>
+        <div class="tile" data-magnetic><div class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><span class="cap">[Proyecto 04]</span></div>
+      </div>
+      <p class="lead" style="margin-top:22px"><span class="ph">[Mándame los videos / links de YouTube o Vimeo y los incrusto con su portada.]</span></p>
+    </section>
+
+    <section class="reveal">
+      <h2>Qué <em>hacemos</em></h2>
+      <div class="svc">
+        <div>Dirección</div>
+        <div>Fotografía</div>
+        <div>Edición</div>
+        <div>Color</div>
+        <div>Motion</div>
+        <div>Reels</div>
+      </div>
+      <p class="lead" style="margin-top:24px"><span class="ph">[Ajusta los servicios reales de Esencia Nativa Media.]</span></p>
+    </section>
+
+    <section class="reveal">
+      <h2>Trabajemos</h2>
+      <div class="contact">
+        <a href="#" data-magnetic>Instagram</a>
+        <a href="#" data-magnetic>YouTube</a>
+        <a href="#" data-magnetic>Behance / Vimeo</a>
+        <a href="mailto:#" data-magnetic>Booking / mail</a>
+      </div>
+    </section>
+
+    <footer>Esencia Nativa Media — 2026</footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script>
+  (function(){
+    "use strict";
+    var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var isTouch=matchMedia("(hover: none)").matches;
+    if(typeof Lenis!=="undefined"&&!reduce){var l=new Lenis({lerp:.08,wheelMultiplier:.9});function raf(t){l.raf(t);requestAnimationFrame(raf);}requestAnimationFrame(raf);}
+    if(!isTouch&&!reduce){
+      var cur=document.getElementById("cursor"),ct={x:innerWidth/2,y:innerHeight/2},cc={x:ct.x,y:ct.y};
+      addEventListener("mousemove",function(e){ct.x=e.clientX;ct.y=e.clientY;cur.style.opacity=1;});
+      (function cl(){cc.x+=(ct.x-cc.x)*.18;cc.y+=(ct.y-cc.y)*.18;cur.style.transform="translate("+cc.x+"px,"+cc.y+"px)";requestAnimationFrame(cl);})();
+      document.querySelectorAll("[data-magnetic]").forEach(function(el){
+        var tx=0,ty=0,x=0,y=0;
+        el.addEventListener("mouseenter",function(){cur.classList.add("hot");});
+        el.addEventListener("mouseleave",function(){cur.classList.remove("hot");tx=0;ty=0;});
+        el.addEventListener("mousemove",function(e){var r=el.getBoundingClientRect();tx=(e.clientX-(r.left+r.width/2))*.25;ty=(e.clientY-(r.top+r.height/2))*.35;});
+        (function ml(){x+=(tx-x)*.12;y+=(ty-y)*.12;el.style.transform="translate("+x+"px,"+y+"px)";requestAnimationFrame(ml);})();
+      });
+    }
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.18});
+    document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
+  })();
+  </script>
+</body>
+</html>
