@@ -8,6 +8,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%230a0b16%27%2F%3E%3Cpath%20d%3D%27M16%204%20L18.2%2013.8%20L28%2016%20L18.2%2018.2%20L16%2028%20L13.8%2018.2%20L4%2016%20L13.8%2013.8%20Z%27%20fill%3D%27%23eaf0ff%27%2F%3E%3C%2Fsvg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%230a0b16%27%2F%3E%3Cpath%20d%3D%27M16%204%20L18.2%2013.8%20L28%2016%20L18.2%2018.2%20L16%2028%20L13.8%2018.2%20L4%2016%20L13.8%2013.8%20Z%27%20fill%3D%27%23eaf0ff%27%2F%3E%3C%2Fsvg%3E">
+<meta name="theme-color" content="#06100a">
+<link rel="canonical" href="https://esencia-nativa.pages.dev/musica">
+<meta property="og:type" content="music.musician">
+<meta property="og:title" content="Esencia Nativa — Música">
+<meta property="og:description" content="Rap desde la raíz.">
+<meta property="og:url" content="https://esencia-nativa.pages.dev/musica">
+<meta property="og:image" content="https://esencia-nativa.pages.dev/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Esencia Nativa — Música">
+<meta name="twitter:image" content="https://esencia-nativa.pages.dev/og.jpg">
 <style>
   :root{
     --bg:#06100a; --bg2:#0a1710;
@@ -84,9 +96,14 @@
     .logo,.reveal{opacity:1!important;transform:none!important;animation:none!important}
     .grain{animation:none}
   }
+
+  .pt{position:fixed;inset:0;z-index:115;background:radial-gradient(circle at 50% 45%,#0c1b11,#05100a);opacity:1;pointer-events:all;transition:opacity .6s ease}
+  html.ready .pt{opacity:0;pointer-events:none}
+  html.leaving .pt{opacity:1;pointer-events:all}
 </style>
 </head>
 <body>
+  <div class="pt" id="pt" aria-hidden="true"></div>
   <canvas id="bg" aria-hidden="true"></canvas>
   <div class="glow" aria-hidden="true"></div>
   <div class="grain" aria-hidden="true"></div>
@@ -216,6 +233,19 @@
       if(audio.paused)audio.play();else audio.pause();
     });
     audio.addEventListener("timeupdate",function(){if(audio.duration)fill.style.width=(audio.currentTime/audio.duration*100)+"%";});
+
+    /* transición de página */
+    (function(){
+      function reveal(){ document.documentElement.classList.add("ready"); }
+      if(document.readyState==="complete") reveal(); else window.addEventListener("load",reveal);
+      setTimeout(reveal,1600);
+      document.querySelectorAll("a[href]").forEach(function(a){
+        var href=a.getAttribute("href");
+        if(href && /\.html($|#)/.test(href) && a.getAttribute("target")!=="_blank"){
+          a.addEventListener("click",function(e){ e.preventDefault(); document.documentElement.classList.add("leaving"); setTimeout(function(){ location.href=href; },500); });
+        }
+      });
+    })();
   })();
   </script>
 </body>
