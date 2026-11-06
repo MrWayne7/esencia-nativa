@@ -100,6 +100,36 @@
   .pt{position:fixed;inset:0;z-index:115;background:radial-gradient(circle at 50% 45%,#0c1b11,#05100a);opacity:1;pointer-events:all;transition:opacity .6s ease}
   html.ready .pt{opacity:0;pointer-events:none}
   html.leaving .pt{opacity:1;pointer-events:all}
+
+  .radio{border:1px solid var(--line);border-radius:18px;padding:22px;background:rgba(10,23,16,.5);max-width:620px}
+  .r-head{display:flex;align-items:center;gap:12px}
+  .r-ctrl{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--bone);display:grid;place-items:center;cursor:pointer;transition:border-color .3s,color .3s,transform .15s}
+  .r-ctrl:hover{border-color:var(--moss);color:var(--moss)}
+  .r-ctrl:active{transform:scale(.93)}
+  .r-play{width:52px;height:52px;border-color:var(--moss);color:var(--moss)}
+  .r-now{margin-left:8px;min-width:0}
+  .r-title{font-weight:500;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .r-sub{font-size:12px;color:var(--bone-dim)}
+  .r-viz{display:flex;align-items:flex-end;gap:3px;height:46px;margin:18px 0 12px}
+  .r-viz span{flex:1;background:linear-gradient(var(--moss),var(--moss-deep));border-radius:2px;height:8%;opacity:.85}
+  .r-bar{height:3px;background:var(--line);border-radius:3px;overflow:hidden;cursor:pointer}
+  .r-bar span{display:block;height:100%;width:0;background:var(--moss)}
+  .r-list{list-style:none;margin:16px 0 0;padding:0}
+  .r-list li{display:flex;justify-content:space-between;gap:12px;padding:11px 2px;border-top:1px solid var(--line);font-size:15px;color:var(--bone-dim);cursor:pointer;transition:color .3s}
+  .r-list li:hover,.r-list li.active{color:var(--moss)}
+  .verse{font-weight:300;font-style:italic;font-size:clamp(20px,4vw,34px);line-height:1.5;color:var(--bone);max-width:28ch;white-space:pre-line}
+  .verse .vline{display:block;opacity:0;transform:translateY(12px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in .verse .vline{opacity:1;transform:none}
+  .verse .vline:nth-child(2){transition-delay:.12s}.verse .vline:nth-child(3){transition-delay:.24s}.verse .vline:nth-child(4){transition-delay:.36s}.verse .vline:nth-child(5){transition-delay:.48s}.verse .vline:nth-child(6){transition-delay:.6s}
+  .dates{list-style:none;margin:0;padding:0}
+  .dates li{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:16px 2px;border-top:1px solid var(--line);font-size:clamp(15px,2.4vw,18px)}
+  .dates .d-date{font-weight:500}
+  .dates a{color:var(--bone-dim);transition:color .3s}
+  .dates a:hover{color:var(--moss)}
+  .btn{display:inline-block;border:1px solid var(--moss);border-radius:100px;padding:14px 30px;color:var(--moss);font-size:15px;transition:background-color .3s,color .3s,transform .3s}
+  .btn:hover{background:var(--moss);color:#06100a;transform:translateY(-2px)}
+  .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+  .gcell{aspect-ratio:1;background:linear-gradient(135deg,#132a1b,#0a160e);border:1px solid var(--line);border-radius:10px;display:grid;place-items:center;color:var(--moss-deep);font-size:13px;font-style:italic}
 </style>
 </head>
 <body>
@@ -133,19 +163,25 @@
     </section>
 
     <section class="reveal">
-      <h2><small>Beat</small>Escucha un adelanto</h2>
-      <div class="player" id="player">
-        <div class="pbtn" id="pbtn" role="button" aria-label="Reproducir">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <h2><small>Radio</small>Suena Esencia Nativa</h2>
+      <div class="radio">
+        <div class="r-head">
+          <button class="r-ctrl" id="rPrev" aria-label="Anterior"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg></button>
+          <button class="r-ctrl r-play" id="rPlay" aria-label="Reproducir"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+          <button class="r-ctrl" id="rNext" aria-label="Siguiente"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM6 6l8.5 6L6 18z"/></svg></button>
+          <div class="r-now"><div class="r-title" id="rTitle">—</div><div class="r-sub">Esencia Nativa</div></div>
         </div>
-        <div class="meta">
-          <div class="ptitle">Beat sin título</div>
-          <div class="psub"><span class="ph">[Pon aquí tu .mp3]</span></div>
-          <div class="bar"><div class="fill" id="fill"></div></div>
-        </div>
+        <div class="r-viz" id="rViz"></div>
+        <div class="r-bar" id="rSeek"><span id="rFill"></span></div>
+        <ul class="r-list" id="rList"></ul>
       </div>
-      <audio id="audio" preload="none"></audio>
-      <p class="lead" style="margin-top:20px"><span class="ph">[Súbeme un beat (.mp3) y lo cargo aquí para que suene al entrar a esta sección.]</span></p>
+      <audio id="rAudio" preload="none"></audio>
+      <p class="lead" style="margin-top:18px"><span class="ph">[Súbeme tus beats como beat1.mp3, beat2.mp3, beat3.mp3 en la carpeta y suenan aquí con el visor latiendo.]</span></p>
+    </section>
+
+    <section class="reveal verso">
+      <h2><small>Verso</small>La raíz habla</h2>
+      <blockquote class="verse"><span class="ph">[Pega aquí un verso tuyo, 2 a 6 líneas, una por renglón. Lo animo línea por línea.]</span></blockquote>
     </section>
 
     <section class="reveal">
@@ -159,8 +195,33 @@
     </section>
 
     <section class="reveal">
+      <h2><small>En vivo</small>Próximas fechas</h2>
+      <ul class="dates">
+        <li><span class="d-date ph">[Fecha]</span><span class="ph">[Ciudad / Lugar]</span><a href="#" data-magnetic>Entradas</a></li>
+        <li><span class="d-date ph">[Fecha]</span><span class="ph">[Ciudad / Lugar]</span><a href="#" data-magnetic>Entradas</a></li>
+      </ul>
+      <p class="lead" style="margin-top:18px"><span class="ph">[Mándame tus fechas reales, o quito esta sección si aún no hay shows.]</span></p>
+    </section>
+
+    <section class="reveal">
+      <h2><small>Galería</small>Imagen</h2>
+      <div class="gal">
+        <div class="gcell">[Foto]</div><div class="gcell">[Foto]</div><div class="gcell">[Foto]</div>
+        <div class="gcell">[Foto]</div><div class="gcell">[Foto]</div><div class="gcell">[Foto]</div>
+      </div>
+      <p class="lead" style="margin-top:18px"><span class="ph">[Mándame fotos y portadas y las monto aquí.]</span></p>
+    </section>
+
+    <section class="reveal">
       <h2><small>Bio</small>Quién es Esencia Nativa</h2>
       <p class="lead"><span class="ph">[Aquí va tu bio — 3 o 4 líneas sobre el artista, de dónde viene, su sonido. Pásamela y la pulo.]</span></p>
+    </section>
+
+    <section class="reveal">
+      <h2><small>Prensa</small>Press kit</h2>
+      <p class="lead">Bio, fotos en alta y enlaces para medios y bookers, en un solo lugar.</p>
+      <a class="btn" href="#" data-magnetic>Descargar press kit</a>
+      <p class="lead" style="margin-top:14px"><span class="ph">[Mándame el PDF o las fotos y enlazo aquí la descarga.]</span></p>
     </section>
 
     <section class="reveal">
@@ -226,13 +287,41 @@
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.18});
     document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
 
-    /* player placeholder */
-    var audio=document.getElementById("audio"),pbtn=document.getElementById("pbtn"),fill=document.getElementById("fill");
-    pbtn.addEventListener("click",function(){
-      if(!audio.src){ pbtn.style.opacity=.5; setTimeout(function(){pbtn.style.opacity=1;},200); return; }
-      if(audio.paused)audio.play();else audio.pause();
-    });
-    audio.addEventListener("timeupdate",function(){if(audio.duration)fill.style.width=(audio.currentTime/audio.duration*100)+"%";});
+    /* ---------- radio ---------- */
+    (function(){
+      var tracks=[{t:"Beat 01",src:"beat1.mp3"},{t:"Beat 02",src:"beat2.mp3"},{t:"Beat 03",src:"beat3.mp3"}];
+      var audio=document.getElementById("rAudio"),play=document.getElementById("rPlay"),prev=document.getElementById("rPrev"),next=document.getElementById("rNext"),
+          title=document.getElementById("rTitle"),fill=document.getElementById("rFill"),seek=document.getElementById("rSeek"),
+          viz=document.getElementById("rViz"),list=document.getElementById("rList");
+      if(!audio)return;
+      var i=0, ac, an, dat, raf=null, bars=[], NB=28;
+      for(var b=0;b<NB;b++){var s=document.createElement("span");viz.appendChild(s);bars.push(s);}
+      tracks.forEach(function(tr,idx){
+        var li=document.createElement("li");
+        li.innerHTML="<span>"+tr.t+"</span>";
+        li.addEventListener("click",function(){ load(idx); start(); });
+        list.appendChild(li); tr.el=li;
+      });
+      function load(idx){ i=idx; audio.src=tracks[i].src; title.textContent=tracks[i].t; tracks.forEach(function(t,k){t.el.classList.toggle("active",k===i);}); }
+      function setIcon(p){ play.innerHTML = p
+        ? "<svg width='20' height='20' viewBox='0 0 24 24' fill='currentColor'><path d='M6 5h4v14H6zM14 5h4v14h-4z'/></svg>"
+        : "<svg width='20' height='20' viewBox='0 0 24 24' fill='currentColor'><path d='M8 5v14l11-7z'/></svg>"; }
+      function initAudio(){ if(ac)return; try{ ac=new (window.AudioContext||window.webkitAudioContext)(); var sr=ac.createMediaElementSource(audio); an=ac.createAnalyser(); an.fftSize=64; dat=new Uint8Array(an.frequencyBinCount); sr.connect(an); an.connect(ac.destination);}catch(e){} }
+      function viztick(){ if(an){ an.getByteFrequencyData(dat); for(var k=0;k<NB;k++){ var v=dat[k%dat.length]/255; bars[k].style.height=(8+v*92)+"%"; } } raf=requestAnimationFrame(viztick); }
+      function start(){ initAudio(); if(ac&&ac.state==="suspended")ac.resume(); audio.play().catch(function(){}); }
+      play.addEventListener("click",function(){ if(!audio.src)load(0); if(audio.paused)start(); else audio.pause(); });
+      prev.addEventListener("click",function(){ load((i-1+tracks.length)%tracks.length); start(); });
+      next.addEventListener("click",function(){ load((i+1)%tracks.length); start(); });
+      audio.addEventListener("play",function(){ setIcon(true); if(!raf)viztick(); });
+      audio.addEventListener("pause",function(){ setIcon(false); });
+      audio.addEventListener("ended",function(){ load((i+1)%tracks.length); start(); });
+      audio.addEventListener("timeupdate",function(){ if(audio.duration)fill.style.width=(audio.currentTime/audio.duration*100)+"%"; });
+      seek.addEventListener("click",function(e){ if(!audio.duration)return; var r=seek.getBoundingClientRect(); audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration; });
+      load(0);
+    })();
+
+    /* ---------- verso: dividir en líneas ---------- */
+    (function(){ var v=document.querySelector(".verse"); if(v){ var t=(v.textContent||"").trim(); v.innerHTML=t.split("\n").map(function(l){return "<span class='vline'>"+l+"</span>";}).join(""); } })();
 
     /* transición de página */
     (function(){

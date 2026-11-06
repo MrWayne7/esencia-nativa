@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Perdido en el espacio — Esencia Nativa</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%230a0b16%27%2F%3E%3Cpath%20d%3D%27M16%204%20L18.2%2013.8%20L28%2016%20L18.2%2018.2%20L16%2028%20L13.8%2018.2%20L4%2016%20L13.8%2013.8%20Z%27%20fill%3D%27%23eaf0ff%27%2F%3E%3C%2Fsvg%3E">
+<meta name="theme-color" content="#06070a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root{--bone:#ece6d8;--dim:rgba(236,230,216,.55);--moon:#b7c2ea;--moon-hi:#eaf0ff;--ease:cubic-bezier(.2,.7,.2,1)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100svh;background:radial-gradient(120% 90% at 50% 30%,#101427,#06070a 70%);color:var(--bone);
+    font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding:40px 24px;overflow:hidden;position:relative}
+  .stars{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:radial-gradient(1px 1px at 20% 30%,#fff,transparent),radial-gradient(1px 1px at 70% 60%,#dfe6ff,transparent),radial-gradient(1px 1px at 40% 80%,#fff,transparent),radial-gradient(1.5px 1.5px at 85% 25%,#fff,transparent),radial-gradient(1px 1px at 55% 15%,#cdd6ff,transparent),radial-gradient(1px 1px at 10% 70%,#fff,transparent);
+    opacity:.7}
+  .wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:20px}
+  .mark{width:30px;height:30px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%230a0b16%27%2F%3E%3Cpath%20d%3D%27M16%204%20L18.2%2013.8%20L28%2016%20L18.2%2018.2%20L16%2028%20L13.8%2018.2%20L4%2016%20L13.8%2013.8%20Z%27%20fill%3D%27%23eaf0ff%27%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.5;transform:scale(.9) translateY(0)}50%{opacity:1;transform:scale(1.1) translateY(-4px)}}
+  h1{font-size:clamp(70px,20vw,150px);font-weight:500;line-height:1;letter-spacing:-.02em;
+    background:linear-gradient(120deg,var(--moon),var(--moon-hi));-webkit-background-clip:text;background-clip:text;color:transparent}
+  p{font-weight:300;font-style:italic;color:var(--dim);font-size:clamp(16px,3vw,20px)}
+  a.home{margin-top:8px;border:1px solid rgba(183,194,234,.4);border-radius:100px;padding:14px 30px;color:var(--moon);font-size:15px;transition:background-color .3s,color .3s,transform .3s,border-color .3s}
+  a.home:hover{background:var(--moon);color:#06070a;transform:translateY(-2px);border-color:var(--moon)}
+  @media (prefers-reduced-motion:reduce){.mark{animation:none}}
+</style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="mark" aria-hidden="true"></div>
+    <h1>404</h1>
+    <p>Te perdiste en el espacio.</p>
+    <a class="home" href="/">Volver al origen</a>
+  </div>
+</body>
+</html>

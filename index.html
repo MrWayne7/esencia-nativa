@@ -209,6 +209,19 @@
   .snd .wave{opacity:0;transition:opacity .3s}
   .snd.on .wave{opacity:1}
   @media (prefers-reduced-motion:reduce){ .pl-mark{animation:none} }
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .manifesto{max-width:820px;margin:0 auto;padding:16vh 24px;text-align:center}
+  .manifesto p{font-weight:300;font-size:clamp(19px,3.4vw,32px);line-height:1.45;color:var(--bone-dim);margin:0 0 14px}
+  .manifesto .hl{color:var(--bone)}
+  .portals{position:relative}
+  .portals::before{content:"";position:absolute;top:-2vh;bottom:-2vh;left:50%;width:1px;transform:translateX(-50%);background:linear-gradient(transparent,rgba(171,185,230,.3) 20%,rgba(171,185,230,.3) 80%,transparent)}
+  .portal{padding-top:30px}
+  .portal::before{content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:var(--gold-hi);box-shadow:0 0 14px 2px rgba(171,185,230,.6);opacity:.7;transition:opacity .3s var(--ease),transform .3s var(--ease);z-index:1}
+  .portal:hover::before,.portal:focus-visible::before{opacity:1;transform:translateX(-50%) scale(1.5)}
+  .shoot{position:fixed;top:0;left:0;z-index:3;width:140px;height:1.5px;background:linear-gradient(90deg,transparent,rgba(234,240,255,.95));border-radius:2px;opacity:0;pointer-events:none;filter:drop-shadow(0 0 6px rgba(200,215,255,.7))}
+  @media (prefers-reduced-motion:reduce){ .reveal{opacity:1!important;transform:none!important} .shoot{display:none} }
 </style>
 </head>
 <body>
@@ -218,6 +231,7 @@
     <div class="pl-num"><span id="plNum">0</span></div>
   </div>
   <div class="pt" id="pt" aria-hidden="true"></div>
+  <div class="shoot" id="shoot" aria-hidden="true"></div>
   <canvas id="bg" aria-hidden="true"></canvas>
   <div class="veil" aria-hidden="true"></div>
   <div class="grain" aria-hidden="true"></div>
@@ -230,6 +244,11 @@
       </div>
       <p class="tagline">La raíz también suena.</p>
       <div class="scroll-cue" aria-hidden="true"></div>
+    </section>
+
+    <section class="manifesto reveal">
+      <p>Antes del sonido, el silencio. Antes del nombre, la raíz.</p>
+      <p>Esencia Nativa es <span class="hl">un origen</span> que se vuelve música, imagen y comunidad.</p>
     </section>
 
     <section class="worlds">
@@ -247,7 +266,7 @@
             <span class="portal-role">Producción audiovisual</span>
           </span>
         </a>
-        <a class="portal" href="#" data-magnetic>
+        <a class="portal" href="https://estacion2600.com" target="_blank" rel="noopener" data-magnetic>
           <span class="portal-inner">
             <span class="portal-name">Estación 2600</span>
             <span class="portal-role">El colectivo</span>
@@ -467,6 +486,28 @@
       },{threshold:0.3});
       io.observe(portals);
     } else if(portals){ portals.classList.add("in"); }
+    /* ---------- reveals ---------- */
+    (function(){
+      if(!("IntersectionObserver" in window)){document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in");});return;}
+      var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");ro.unobserve(e.target);}});},{threshold:.2});
+      document.querySelectorAll(".reveal").forEach(function(el){ro.observe(el);});
+    })();
+
+    /* ---------- estrella fugaz ---------- */
+    if(!reduce){
+      var shoot=document.getElementById("shoot");
+      (function fire(){
+        var rot=Math.random()*22+16, top=Math.random()*38+6, left=Math.random()*35+28;
+        shoot.style.top=top+"vh"; shoot.style.left=left+"vw";
+        shoot.animate(
+          [{opacity:0,transform:"rotate("+rot+"deg) translateX(0)"},
+           {opacity:1,offset:.18},
+           {opacity:0,transform:"rotate("+rot+"deg) translateX(46vw)"}],
+          {duration:950,easing:"cubic-bezier(.3,.6,.2,1)"});
+        setTimeout(fire, Math.random()*10000+7000);
+      });
+      setTimeout(function(){ var s=document.getElementById("shoot"); if(s){ (function f(){ var rot=Math.random()*22+16,top=Math.random()*38+6,left=Math.random()*35+28; s.style.top=top+"vh"; s.style.left=left+"vw"; s.animate([{opacity:0,transform:"rotate("+rot+"deg) translateX(0)"},{opacity:1,offset:.18},{opacity:0,transform:"rotate("+rot+"deg) translateX(46vw)"}],{duration:950,easing:"cubic-bezier(.3,.6,.2,1)"}); setTimeout(f, Math.random()*10000+7000); })(); } }, 4500);
+    }
   })();
   </script>
 </body>

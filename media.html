@@ -112,6 +112,19 @@
   .pt{position:fixed;inset:0;z-index:115;background:radial-gradient(circle at 50% 45%,#141418,#09090c);opacity:1;pointer-events:all;transition:opacity .6s ease}
   html.ready .pt{opacity:0;pointer-events:none}
   html.leaving .pt{opacity:1;pointer-events:all}
+
+  .steps{list-style:none;margin:0;padding:0}
+  .steps li{display:grid;grid-template-columns:auto 1fr;gap:4px 20px;align-items:baseline;padding:24px 2px;border-top:1px solid var(--line)}
+  .steps .st-n{font-family:"Anton",sans-serif;font-size:clamp(22px,4vw,34px);color:var(--spark);grid-row:span 2}
+  .steps .st-t{font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(18px,3vw,26px)}
+  .steps .st-d{color:var(--dim);font-weight:300;font-size:15px;line-height:1.5}
+  .quote{display:flex;flex-direction:column;gap:12px;max-width:520px;margin-top:8px}
+  .quote input,.quote select,.quote textarea{background:var(--panel);border:1px solid var(--line);color:var(--bone);font-family:inherit;font-size:15px;padding:14px 16px;border-radius:10px;outline:none;transition:border-color .3s}
+  .quote input::placeholder,.quote textarea::placeholder{color:var(--dim)}
+  .quote input:focus,.quote select:focus,.quote textarea:focus{border-color:var(--spark)}
+  .quote textarea{resize:vertical}
+  .qbtn{align-self:flex-start;border:1px solid var(--spark);background:transparent;color:var(--spark);font-family:"Anton",sans-serif;text-transform:uppercase;letter-spacing:.04em;font-size:16px;padding:13px 28px;border-radius:100px;cursor:pointer;transition:background-color .3s,color .3s,transform .2s}
+  .qbtn:hover{background:var(--spark);color:#0b0b0d}
 </style>
 </head>
 <body>
@@ -185,6 +198,30 @@
     </section>
 
     <section class="reveal">
+      <h2>El <em>proceso</em></h2>
+      <ol class="steps">
+        <li><span class="st-n">01</span><span class="st-t">Idea y dirección</span><span class="st-d">Concepto, guion y lenguaje visual.</span></li>
+        <li><span class="st-n">02</span><span class="st-t">Rodaje</span><span class="st-d">Cámara, luz y sonido directo en locación.</span></li>
+        <li><span class="st-n">03</span><span class="st-t">Edición</span><span class="st-d">Montaje, ritmo y narrativa.</span></li>
+        <li><span class="st-n">04</span><span class="st-t">Color y entrega</span><span class="st-d">Color, sonido final y masters para cada formato.</span></li>
+      </ol>
+    </section>
+
+    <section class="reveal">
+      <h2>Cot<em>iza</em></h2>
+      <p class="lead">Cuéntanos del proyecto y te escribimos por WhatsApp.</p>
+      <div class="quote">
+        <input id="qName" type="text" placeholder="Tu nombre" autocomplete="name">
+        <select id="qType" aria-label="Tipo de proyecto">
+          <option>Videoclip</option><option>Comercial</option><option>Evento</option>
+          <option>Contenido / redes</option><option>Sonido directo</option><option>Otro</option>
+        </select>
+        <textarea id="qMsg" rows="3" placeholder="Cuéntanos la idea, fechas y ciudad"></textarea>
+        <button class="qbtn" id="qSend" data-magnetic>Enviar por WhatsApp</button>
+      </div>
+    </section>
+
+    <section class="reveal">
       <h2>Trabajemos</h2>
       <div class="contact">
         <a href="#" data-magnetic>Instagram</a>
@@ -252,6 +289,19 @@
 
     /* blur-up portadas */
     document.querySelectorAll(".tile img").forEach(function(im){ if(im.complete&&im.naturalWidth) im.classList.add("loaded"); else im.addEventListener("load",function(){ im.classList.add("loaded"); }); });
+
+    /* cotización -> WhatsApp */
+    (function(){
+      var btn=document.getElementById("qSend"); if(!btn)return;
+      var WA="573006342627";
+      btn.addEventListener("click",function(){
+        var n=(document.getElementById("qName").value||"").trim();
+        var t=document.getElementById("qType").value;
+        var msg=(document.getElementById("qMsg").value||"").trim();
+        var text="Hola Esencia Nativa Media! Soy "+(n||"(sin nombre)")+". Proyecto: "+t+". "+(msg||"");
+        window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(text),"_blank","noopener");
+      });
+    })();
   })();
   </script>
 </body>
